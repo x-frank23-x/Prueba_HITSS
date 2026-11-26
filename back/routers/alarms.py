@@ -83,14 +83,7 @@ def listAlarms(criticality: str = None, db: Session = Depends(get_db)):
 @router.get("/summary/today", response_model=DailySummaryResponse)
 def summaryDay(db: Session = Depends(get_db)):
 
-    alarms = [
-        {"dateCreate": datetime.now().replace(hour=8, minute=15)},
-        {"dateCreate": datetime.now().replace(hour=8, minute=30)},
-        {"dateCreate": datetime.now().replace(hour=14, minute=10)},
-        {"dateCreate": datetime.now().replace(hour=14, minute=20)},
-        {"dateCreate": datetime.now().replace(hour=14, minute=45)},
-        {"dateCreate": None}
-    ]
+    alarms = []
 
     print("Total de alarmas:", len(alarms))
 

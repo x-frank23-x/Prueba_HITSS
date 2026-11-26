@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from typing import Optional
 
 def calculateTextDuration(seconds: float) -> str:
     if seconds < 0:
@@ -17,34 +17,28 @@ def classifyAlarm(
     tec3g: int,
     tec4g: int,
     noti: str,
+    now: Optional[datetime] = None,
 ) -> dict:
-    now = datetime.now()
-    difference = now - dateCreate
-    secondsElapsed = difference.total_seconds()
+    now = now or datetime.now()
+    secondsElapsed = max((now - dateCreate).total_seconds(), 0)
+    hoursElapsed = secondsElapsed / 3600
 
-    if secondsElapsed < 0:
-        secondsElapsed = 0
-
-    hoursElapsed = round(secondsElapsed / 3600, 2)
-    durationText = calculateTextDuration(secondsElapsed)
-
-    techAvailable = tec2g >= 0 and tec3g >= 0 and tec4g >= 0
-
-    atLimit = tec2g == 100 or tec3g == 100 or tec4g == 100
-
-    # 3. Notificación negativa ("N")
+  
+    available = [v for v in (tec2g, tec3g, tec4g) if v >= 0]
+    
+    atLimit = len(available) > 0 and all(v == 100 for v in available)
+    
     notNotified = noti.strip().upper() == "N"
 
     criticality = "NORMAL"
-
-    if techAvailable and atLimit and notNotified:
+    if atLimit and notNotified:
         if hoursElapsed > 24:
             criticality = "CRITICAL"
         elif hoursElapsed > 1:
             criticality = "WARN"
 
     return {
-        "durationHours": hoursElapsed,
-        "durationText": durationText,
+        "durationHours": round(hoursElapsed, 2),
+        "durationText": calculateTextDuration(secondsElapsed),
         "criticality": criticality,
     }

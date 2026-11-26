@@ -37,17 +37,17 @@ const pick = (o: any, keys: string[]) => keys.map((k) => o?.[k]).find((v) => v !
 function normalizeResumen(raw: any): ResumenDia {
   let src: any = Array.isArray(raw)
     ? raw
-    : pick(raw, ['por_hora', 'porHora', 'byHour', 'by_hour', 'hours', 'hourly', 'groups', 'items', 'data', 'summary'])
+    : pick(raw, ['perHour', 'por_hora', 'porHora', 'byHour', 'by_hour', 'hours', 'hourly', 'groups', 'items', 'data', 'summary'])
   if (src && !Array.isArray(src) && typeof src === 'object') src = Object.entries(src).map(([hora, total]) => ({ hora, total }))
   const por_hora = ((src ?? []) as any[])
     .map((x) => ({
       hora: parseInt(String(pick(x, ['hora', 'hour', 'range', 'slot', 'franja', 'label', 'time'])), 10),
-      total: Number(pick(x, ['total', 'count', 'cantidad', 'alarms', 'totalAlarms', 'total_alarms']) ?? 0),
+      total: Number(pick(x, ['amount', 'total', 'count', 'cantidad', 'alarms', 'totalAlarms', 'total_alarms']) ?? 0),
     }))
     .filter((x) => x.hora >= 0 && x.hora <= 23)
   return {
     fecha: String(pick(raw, ['fecha', 'date', 'day']) ?? new Date().toISOString().slice(0, 10)),
-    total: Number(pick(raw, ['total', 'totalAlarms', 'total_alarms', 'count']) ?? por_hora.reduce((s, x) => s + x.total, 0)),
+    total: Number(pick(raw, ['totalDay', 'total', 'totalAlarms', 'total_alarms', 'count']) ?? por_hora.reduce((s, x) => s + x.total, 0)),
     por_hora,
   }
 }
