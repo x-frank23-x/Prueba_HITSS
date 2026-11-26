@@ -1,5 +1,15 @@
-Servicio de clasificación de alarmas (alarmClassifier.py)
+Tener en cuenta para que se ejecute es que debemos crear un un archivo .env en el frontend que seran dos .env.example .env que deberan tener el mismo contenido 
 
+VITE_USE_MOCK=false
+VITE_API_URL=http://localhost:8000
+VITE_MOCK_EMPTY=true
+
+esto para que no use los datos de prueba en el frontend y nos deje trabajar con los archivos reales
+
+y ahora si con la explicacion
+----------------------------------------------------------
+Servicio de clasificación de alarmas (alarmClassifier.py)
+----------------------------------------------------------
 Descripción general
 
 Este servicio alarmClassifier.py esta encargado de que nos calcule el tiempo que transcurrio desde la creación de una alarma y determinar su nivel de criticidad.
@@ -61,3 +71,5 @@ durationHours: tiempo transcurrido expresado en horas.
 durationText: tiempo convertido a horas y minutos.
 
 criticality: nivel de criticidad asignado a la alarma.
+
+
